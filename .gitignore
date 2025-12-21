@@ -15,8 +15,8 @@ db.php
 # Node
 node_modules/
 # Docker / baze / runtime podatki
-data/
-**/data/
+data/mysql/
+data/mysql/**
 *.sock
 *.pid
 # Logi
@@ -28,3 +28,6 @@ data/
 # Začasne datoteke
 tmp/
 temp/
+
+!data/www/
+!data/www/**
