@@ -1,0 +1,215 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #000;
+    color: #fff;
+}
+
+/* ============================
+   HEADER
+============================ */
+header {
+    background: #000 !important;
+    border-color: #444 !important;
+}
+
+header .nav-link,
+header a,
+header i {
+    color: #fff;
+}
+
+header a:hover,
+header .nav-link:hover {
+    color: #ccc !important;
+}
+
+.navbar-toggler span {
+    color: #fff;
+    font-size: 30px;
+}
+
+#navMenu .nav-link {
+    color: #fff !important;
+}
+
+/* Search button */
+header .btn-outline-dark {
+    border-color: #fff !important;
+    color: #fff !important;
+}
+
+header .btn-outline-dark:hover {
+    background: #fff !important;
+    color: #000 !important;
+}
+
+/* Mobile menu bg */
+#navMenu {
+    background: #000;
+}
+
+/* ============================
+   HERO SECTION
+============================ */
+.hero {
+    height: 60vh;
+    background: url("../slike/index1.jpg") center/cover no-repeat;
+    position: relative;
+}
+
+.hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+}
+
+.hero-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.hero-content h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+    color: #fff !important;   /* BEL TEKST */
+}
+
+.btn {
+    padding: 12px 30px;
+    background: #fff !important;
+    color: #000 !important;
+    border-radius: 4px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/* ============================
+   NOVO SEKCIJA
+============================ */
+.novo {
+    padding: 50px 40px;
+}
+
+.novo h2 {
+    font-size: 38px;
+    margin-bottom: 25px;
+    color: #fff;
+}
+
+/* GRID – bootstrap responsive */
+.produkti-grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+@media(min-width: 768px) {
+    .produkti-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media(min-width: 1200px) {
+    .produkti-grid {
+        grid-template-columns: repeat(6, 1fr);
+    }
+}
+
+/* ============================
+   PRODUKTNE KARTICE
+============================ */
+.produkt-kartica {
+    background: #fff;
+    color: #000;
+    padding: 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.produkt-kartica:hover {
+    transform: scale(1.03);
+}
+
+.slika-ovoj {
+    position: relative;
+}
+
+.slika-ovoj img {
+    width: 100%;
+    height: 230px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.wishlist-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(255,255,255,0.7);
+    border: none;
+    font-size: 22px;
+    color: #000;
+    cursor: pointer;
+    border-radius: 50%;
+    padding: 4px 7px;
+}
+
+.produkt-kartica h3 {
+    margin-top: 10px;
+    font-size: 17px;
+    font-weight: bold;
+    color: #000;
+}
+
+.cena {
+    margin-top: 5px;
+    font-size: 16px;
+    color: #000;
+}
+
+/* ============================
+   GUMBI
+============================ */
+.btn-secondary {
+    padding: 10px 25px;
+    background: #fff;
+    color: #000;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.center {
+    text-align: center;
+    margin-top: 30px;
+}
+
+/* ============================
+   FOOTER
+============================ */
+footer {
+    background: #000 !important;
+    color: #fff !important;
+}
+
+footer a {
+    color: #fff !important;
+}
+
+footer a:hover {
+    color: #ccc !important;
+}
+
+footer hr {
+    border-color: #444 !important;
+}
