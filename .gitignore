@@ -1,0 +1,30 @@
+# OS / sistemske datoteke
+.DS_Store
+Thumbs.db
+desktop.ini
+# IDE / urejevalniki
+.vscode/
+.idea/
+# Okoljske in konfiguracijske datoteke
+.env
+.env.*
+config.php
+db.php
+# PHP
+/vendor/
+# Node
+node_modules/
+# Docker / baze / runtime podatki
+data/
+**/data/
+*.sock
+*.pid
+# Logi
+*.log
+# Backup datoteke
+*.bak
+*.old
+*.backup
+# Začasne datoteke
+tmp/
+temp/
