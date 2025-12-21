@@ -153,25 +153,29 @@ $stevilo_rezultatov = count($produkti);
     <!-- Število rezultatov -->
     <p>Število rezultatov: <?php echo $stevilo_rezultatov; ?></p>
 
-    <!-- GRID PRODUKTOV (ENAKO KOT NA INDEX.PHP) -->
-    <div class="row g-3">
-        <?php foreach($produkti as $p): ?>
-        <div class="col-6 col-md-3 col-lg-2">
-            <div class="produkt-kartica bg-white p-3 rounded shadow-sm h-100">
-                <a href="produkt.php?id=<?php echo $p['id_produkt']; ?>" class="text-decoration-none text-dark d-block h-100">
-                    <div class="slika-ovoj position-relative mb-2">
-                        <img src="data:image/jpeg;base64,<?php echo base64_encode($p['slika']); ?>" class="img-fluid rounded" alt="">
-                        <button class="wishlist-btn position-absolute top-0 end-0 m-1 border-0 bg-transparent">
-                            <i class="bi bi-heart"></i>
-                        </button>
-                    </div>
-                    <h3 class="h6"><?php echo htmlspecialchars($p['naziv']); ?></h3>
-                    <p class="cena fw-bold"><?php echo $p['cena'] ? number_format($p['cena'],2)." €" : "po dogovoru"; ?></p>
-                </a>
-            </div>
-        </div>
-        <?php endforeach; ?>
-    </div>
+    <div id="product-grid"></div>
+
+    <?php
+    foreach ($produkti as &$p) {
+        if (!empty($p['slika'])) {
+            $p['slika'] = base64_encode($p['slika']);
+        } else {
+            $p['slika'] = null;
+        }
+    }
+    unset($p);
+    ?>
+    
+    <script>
+    window.products = <?php
+        echo json_encode(
+            $produkti ?? [],
+            JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
+        );
+    ?>;
+    </script>
+
+    
 </div>
 
 <?php include "../includes/footer.php"; ?>

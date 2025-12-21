@@ -77,26 +77,27 @@ $wishlist = $wishlist_stmt->fetchAll(PDO::FETCH_ASSOC);
         <!-- Desni: Wishlist -->
         <div class="col-lg-6 mb-4">
             <h4>Wishlist</h4>
-            <div class="row g-3">
-                <?php foreach($wishlist as $p): ?>
-                <div class="col-6 col-md-6 col-lg-6">
-                    <a href="produkt.php?id=<?php echo $p['id_produkt']; ?>" class="text-decoration-none text-dark">
-                        <div class="produkt-kartica bg-white p-2 rounded">
-                            <div class="slika-ovoj position-relative">
-                                <img src="data:image/jpeg;base64,<?php echo base64_encode($p['slika']); ?>" class="img-fluid rounded" alt="">
-                                <button class="wishlist-btn position-absolute top-0 end-0 m-1 border-0 bg-transparent">
-                                    <i class="bi bi-heart"></i>
-                                </button>
-                            </div>
-                            <h5 class="mt-2"><?php echo htmlspecialchars($p['naziv']); ?></h5>
-                            <p class="cena"><?php echo $p['cena'] ? number_format($p['cena'],2)." €" : "po dogovoru"; ?></p>
-                        </div>
-                    </a>
-                </div>
-                <?php endforeach; ?>
-            </div>
+            <?php
+            foreach ($wishlist as &$p) {
+                if (!empty($p['slika'])) {
+                    $p['slika'] = base64_encode($p['slika']);
+                } else {
+                    $p['slika'] = null;
+                }
+            }
+            unset($p);
+            ?>
+            <div id="product-grid" data-layout="wishlist"></div>
         </div>
     </div>
 </div>
+<script>
+window.products = <?php
+    echo json_encode(
+        $wishlist ?? [],
+        JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
+    );
+?>;
+</script>
 
 <?php include "../includes/footer.php"; ?>
