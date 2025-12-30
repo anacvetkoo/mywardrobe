@@ -1,4 +1,5 @@
 <?php
+    require_once "includes/session.php";
     include "includes/header.php";
     require_once "includes/db.php";
 

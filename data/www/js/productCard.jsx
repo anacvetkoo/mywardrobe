@@ -8,7 +8,7 @@ const ProductCard = ({ product, colClass }) => {
     return (
         <div className={colClass}>
             <a
-                href={`podstrani/produkt.php?id=${product.id_produkt}`}
+                href={`/podstrani/produkt.php?id=${product.id_produkt}`}
                 className="text-decoration-none text-dark"
             >
                 <div className="card h-100 shadow-sm produkt-kartica">

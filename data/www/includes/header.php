@@ -50,7 +50,7 @@
             <a href="/podstrani/profil.php" class="me-3">
                 <i class="bi bi-person"></i>
             </a>
-            <a href="/Strani/kosarica.php" class="me-3">
+            <a href="/podstrani/nastavitve.php" class="me-3">
                 <i class="bi bi-brilliance"></i>
             </a>
             <a href="/podstrani/prodaj.php" class="btn-secondary">Prodaj zdaj</a>
@@ -86,7 +86,7 @@
                 <a href="/podstrani/profil.php" class="me-3">
                     <i class="bi bi-person"></i>
                 </a>
-                <a href="/Strani/kosarica.php" class="me-3">
+                <a href="/podstrani/nastavitve.php" class="me-3">
                     <i class="bi bi-brilliance"></i>
                 </a>
                 <a href="/podstrani/prodaj.php" class="btn-secondary">Prodaj zdaj</a>
