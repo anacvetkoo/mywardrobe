@@ -47,9 +47,15 @@
 
         <!-- Ikone (desktop) -->
         <div class="d-flex align-items-center d-none d-lg-flex">
-            <a href="/podstrani/profil.php" class="me-3">
-                <i class="bi bi-person"></i>
-            </a>
+            <?php if (isset($_SESSION["uporabnik_id"])): ?>
+                <a href="/podstrani/profil.php?id=<?= $_SESSION["uporabnik_id"] ?>" class="me-3">
+                    <i class="bi bi-person"></i>
+                </a>
+            <?php else: ?>
+                <a href="/podstrani/prijava.php" class="me-3">
+                    <i class="bi bi-person"></i>
+                </a>
+            <?php endif; ?>
             <a href="/podstrani/nastavitve.php" class="me-3">
                 <i class="bi bi-brilliance"></i>
             </a>
@@ -83,9 +89,15 @@
             </form>
 
             <div class="d-flex justify-content-center mt-3 d-lg-none">
-                <a href="/podstrani/profil.php" class="me-3">
-                    <i class="bi bi-person"></i>
-                </a>
+                <?php if (isset($_SESSION["uporabnik_id"])): ?>
+                    <a href="/podstrani/profil.php?id=<?= $_SESSION["uporabnik_id"] ?>" class="me-3">
+                        <i class="bi bi-person"></i>
+                    </a>
+                <?php else: ?>
+                    <a href="/podstrani/prijava.php" class="me-3">
+                        <i class="bi bi-person"></i>
+                    </a>
+                <?php endif; ?>
                 <a href="/podstrani/nastavitve.php" class="me-3">
                     <i class="bi bi-brilliance"></i>
                 </a>

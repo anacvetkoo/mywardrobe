@@ -44,6 +44,7 @@ $wishlist = $wishlist_stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
         <div class="ms-auto">
             <button class="btn btn-dark">Uredi profil</button>
+            <a href="/includes/odjava.php" class="btn btn-outline-danger ms-2">Odjava</a>
         </div>
     </div>
 
