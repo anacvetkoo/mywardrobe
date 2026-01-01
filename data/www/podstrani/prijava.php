@@ -1,6 +1,38 @@
 <?php
 require_once "../includes/session.php";
 require_once "../includes/db.php";
+
+$napaka = "";
+
+if (isset($_GET["msg"]) && $_GET["msg"] === "obstaja") {
+    $napaka = "Uporabnik že obstaja. Prosim prijavi se.";
+}
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $email = trim($_POST["email"] ?? "");
+    $geslo = $_POST["geslo"] ?? "";
+
+    if ($email === "" || $geslo === "") {
+        $napaka = "Vnesi e-pošto in geslo.";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $napaka = "E-pošta ni veljavna.";
+    } else {
+        $stmt = $pdo->prepare("SELECT id_uporabnik, geslo FROM Uporabnik WHERE uporabnisko_ime = ?");
+        $stmt->execute([$email]);
+        $u = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // SHA preverjanje
+        $vnosHash = hash('sha256', $geslo);
+
+        if ($u && hash_equals($u["geslo"], $vnosHash)) {
+            $_SESSION["uporabnik_id"] = $u["id_uporabnik"];
+            header("Location: profil.php?id=" . $u["id_uporabnik"]);
+            exit;
+        } else {
+            $napaka = "Napačna e-pošta ali geslo.";
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="sl">
@@ -16,14 +48,20 @@ require_once "../includes/db.php";
     <a href="../index.php"><img src="/slike/logo.png" alt="MyWardrobe logo" class="mb-4" style="width:150px;"></a>
     <h2 class="mb-4">PRIJAVA</h2>
 
-    <form class="w-100" style="max-width:400px;" action="prijava_handler.php" method="post">
+    <?php if (!empty($napaka)): ?>
+    <div class="alert alert-danger w-100" style="max-width:400px;">
+        <?php echo htmlspecialchars($napaka); ?>
+    </div>
+    <?php endif; ?>
+
+    <form class="w-100" style="max-width:400px;" action="" method="post">
         <div class="mb-3">
-            <label for="username" class="form-label">Uporabniško ime</label>
-            <input type="text" class="form-control" id="username" name="username" required>
+            <label for="email" class="form-label">Uporabniško ime</label>
+            <input type="email" class="form-control" id="email" name="email" required>
         </div>
         <div class="mb-3">
-            <label for="password" class="form-label">Geslo</label>
-            <input type="password" class="form-control" id="password" name="password" required>
+            <label for="geslo" class="form-label">Geslo</label>
+            <input type="password" class="form-control" id="geslo" name="geslo" required>
         </div>
         <button type="submit" class="btn btn-dark w-100">Prijava</button>
     </form>
