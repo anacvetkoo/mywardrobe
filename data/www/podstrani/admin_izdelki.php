@@ -28,6 +28,12 @@ $produkti = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="col-6 col-md-3 col-lg-2">
                 <div class="card h-100 shadow-sm">
 
+                <a
+        href="/podstrani/produkt.php?id=<?= $p["id_produkt"] ?>"
+        class="text-decoration-none text-dark"
+        style="flex-grow:1;"
+    >
+
                     <img
                         src="data:image/jpeg;base64,<?= base64_encode($p["slika"]) ?>"
                         class="card-img-top"
@@ -43,6 +49,7 @@ $produkti = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <?= $p["cena"] ? number_format($p["cena"], 2) . " €" : "Po dogovoru" ?>
                         </p>
                     </div>
+        </a>
 
                     <div class="card-footer text-center">
                         <a
