@@ -29,7 +29,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION["tip"] = (int)$u["TK_tip_uporabnika"];
             header("Location: profil.php?id=" . $u["id_uporabnik"]);
             exit;
-        } else {
+        } elseif ($u && !$u["aktiven"]) {
+            $napaka = "Račun še ni potrjen. Preveri e-pošto.";
+        }else {
             $napaka = "Napačna e-pošta ali geslo.";
         }
     }

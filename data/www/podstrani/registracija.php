@@ -35,18 +35,44 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         // SHA-256 hash gesla
         $hash = hash('sha256', $geslo);
 
-        // v tvoji bazi je uporabnisko_ime, zato tja shranimo email
+       // 1. generiraj 2FA kodo
+        $koda = random_int(100000, 999999);
+        $potece = date("Y-m-d H:i:s", time() + 600); // 10 minut
+
+        // 2. vstavi NEAKTIVNEGA uporabnika + 2FA podatke
         $ins = $pdo->prepare("
-            INSERT INTO Uporabnik (ime, priimek, uporabnisko_ime, geslo, TK_tip_uporabnika)
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO Uporabnik (
+                ime,
+                priimek,
+                uporabnisko_ime,
+                geslo,
+                TK_tip_uporabnika,
+                aktiven,
+                koda_2fa,
+                koda_2fa_potece
+            )
+            VALUES (?, ?, ?, ?, ?, 0, ?, ?)
         ");
-        $ins->execute([$ime, $priimek, $email, $hash, 1]);
+        $ins->execute([
+            $ime,
+            $priimek,
+            $email,
+            $hash,
+            1,
+            $koda,
+            $potece
+        ]);
 
-        // AUTO LOGIN po registraciji
+        // 3. shrani ID za preverjanje kode
         $novId = $pdo->lastInsertId();
-        $_SESSION["uporabnik_id"] = $novId;
+        $_SESSION["2fa_uporabnik"] = $novId;
 
-        header("Location: profil.php?id=" . $novId);
+        // 4. pošlji kodo na e-pošto
+        require_once "../includes/poslji_kodo.php";
+        poslji2FAKodo($email, $koda);
+
+        // 5. preusmeri na vnos kode
+        header("Location: preveri_kodo.php");
         exit;
     }
 }
