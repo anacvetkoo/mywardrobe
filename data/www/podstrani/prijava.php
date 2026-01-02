@@ -17,15 +17,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $napaka = "E-pošta ni veljavna.";
     } else {
-        $stmt = $pdo->prepare("SELECT id_uporabnik, geslo FROM Uporabnik WHERE uporabnisko_ime = ?");
+        $stmt = $pdo->prepare("SELECT id_uporabnik, geslo, TK_tip_uporabnika, aktiven FROM Uporabnik WHERE uporabnisko_ime = ?");
         $stmt->execute([$email]);
         $u = $stmt->fetch(PDO::FETCH_ASSOC);
 
         // SHA preverjanje
         $vnosHash = hash('sha256', $geslo);
 
-        if ($u && hash_equals($u["geslo"], $vnosHash)) {
+        if ($u && $u["aktiven"] && hash_equals($u["geslo"], $vnosHash)) {
             $_SESSION["uporabnik_id"] = $u["id_uporabnik"];
+            $_SESSION["tip"] = (int)$u["TK_tip_uporabnika"];
             header("Location: profil.php?id=" . $u["id_uporabnik"]);
             exit;
         } else {

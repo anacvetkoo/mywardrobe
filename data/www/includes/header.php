@@ -1,4 +1,9 @@
+<?php
+require_once __DIR__ . "/session.php";
+?>
 <!DOCTYPE html>
+
+
 <html lang="sl">
 <head>
     <meta charset="UTF-8">
@@ -36,6 +41,10 @@
                 <a class="nav-link me-3" href="/podstrani/kategorija.php?tip=obutev">Obutev</a>
                 <a class="nav-link me-3" href="/podstrani/kategorija.php?tip=dodatki">Dodatki</a>
                 <a class="nav-link me-3" href="/podstrani/kategorija.php">Vse</a>
+                <?php if (jeAdmin()): ?>
+                    <a class="nav-link me-3" href="/podstrani/admin_uporabniki.php">Uporabniki</a>
+                    <a class="nav-link me-3" href="/podstrani/admin_izdelki.php">Objave</a>
+                <?php endif; ?>
             </nav>
         </div>
 
@@ -81,6 +90,10 @@
             <a class="nav-link text-dark me-3" href="/podstrani/kategorija.php?tip=obutev">Obutev</a>
             <a class="nav-link text-dark me-3" href="/podstrani/kategorija.php?tip=dodatki">Dodatki</a>
             <a class="nav-link text-dark me-3" href="/podstrani/kategorija.php">Vse</a>
+            <?php if (jeAdmin()): ?>
+                <a class="nav-link" href="/podstrani/admin_uporabniki.php">Uporabniki</a>
+                <a class="nav-link" href="/podstrani/admin_izdelki.php">Objave</a>
+            <?php endif; ?>
 
             <!-- Search bar (mobile) -->
             <form class="d-flex my-3 justify-content-center" role="search" action="/podstrani/search.php" method="get">

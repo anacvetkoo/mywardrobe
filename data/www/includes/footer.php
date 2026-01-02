@@ -47,7 +47,8 @@
               </div>
             </div>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-            <script type="text/babel" src="/js/ProductCard.jsx"></script>
-            <script type="text/babel" src="/js/ProductGrid.jsx"></script>
+            <script type="text/babel" src="/js/productCard.jsx"></script>
+            <script type="text/babel" src="/js/productGrid.jsx"></script>
             <script type="text/babel" src="/js/app.jsx"></script>
+          
           </footer>
