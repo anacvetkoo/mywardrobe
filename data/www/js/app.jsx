@@ -14,7 +14,12 @@ if (typeof products !== "undefined") {
     console.warn("Products not available");
 }
 
-let colClass = "col-6 col-md-3 col-lg-2";
+const cardSize = localStorage.getItem("cardSize") ?? "small";
+
+let colClass =
+    cardSize === "large"
+        ? "col-sm-12 col-md-6 col-lg-3"
+        : "col-sm-6 col-md-3 col-lg-2";
 if (rootElement.dataset.layout === "wishlist") {
     colClass = "col-6 col-md-6 col-lg-6"; // wishlist na profilu
 }
