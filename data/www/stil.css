@@ -6,9 +6,14 @@
     font-family: Arial, sans-serif;
 }
 
-body {
+body.dark-mode {
     background: #000;
     color: #fff;
+}
+
+body.light-mode{
+    background-color: #fff !important;
+    color: #000 !important;
 }
 
 /* ============================
@@ -213,4 +218,5 @@ footer a:hover {
 footer hr {
     border-color: #444 !important;
 }
+
 
