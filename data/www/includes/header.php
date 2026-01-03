@@ -51,8 +51,8 @@ require_once __DIR__ . "/session.php";
         </div>
 
         <!-- Search bar (desktop) -->
-        <form class="d-none d-lg-flex mx-3" role="search" action="/podstrani/search.php" method="get">
-            <input class="form-control me-2" type="search" name="q" placeholder="Išči izdelke..." aria-label="Search">
+        <form class="d-none d-lg-flex mx-3" role="search" action="/podstrani/rezultati_iskanja.php" method="get">
+            <input class="form-control me-2" type="search" name="q" placeholder="Išči izdelke..." aria-label="Search" required>
             <button class="btn btn-outline-dark" type="submit"><i class="bi bi-search" style="color:grey;"></i></button>
         </form>
 
@@ -98,8 +98,8 @@ require_once __DIR__ . "/session.php";
             <?php endif; ?>
 
             <!-- Search bar (mobile) -->
-            <form class="d-flex my-3 justify-content-center" role="search" action="/podstrani/search.php" method="get">
-                <input class="form-control me-2" type="search" name="q" placeholder="Išči izdelke..." aria-label="Search">
+            <form class="d-flex my-3 justify-content-center" role="search" action="/podstrani/rezultati_iskanja.php" method="get">
+                <input class="form-control me-2" type="search" name="q" placeholder="Išči izdelke..." aria-label="Search" required>
                 <button class="btn btn-outline-dark" type="submit"><i class="bi bi-search" style="color:grey;"></i></button>
             </form>
 
