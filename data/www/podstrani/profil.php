@@ -1,7 +1,51 @@
 <?php
 require_once "../includes/session.php";
-include "../includes/header.php";
+
 require_once "../includes/db.php";
+
+// SHRANJEVANJE SPREMEMB PROFILA
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["shrani_profil"])) {
+
+    $id = $_GET["id"] ?? null;
+
+        if (!$id) {
+            die("Neveljaven uporabnik.");
+        }
+    $ime = trim($_POST["ime"]);
+    $priimek = trim($_POST["priimek"]);
+
+    // osnovni update
+    $sql = "UPDATE Uporabnik SET ime = ?, priimek = ?";
+    $params = [$ime, $priimek];
+
+    // nova slika (neobvezno)
+    if (isset($_FILES["nova_slika"]) && $_FILES["nova_slika"]["error"] === UPLOAD_ERR_OK) {
+
+        $ext = strtolower(pathinfo($_FILES["nova_slika"]["name"], PATHINFO_EXTENSION));
+        $dovoljeni = ["jpg", "jpeg", "png", "webp"];
+
+        if (in_array($ext, $dovoljeni)) {
+
+            $imeDat = "user_" . $id . "_" . time() . "." . $ext;
+            $uploadDir = "../uploads/users/";
+            move_uploaded_file($_FILES["nova_slika"]["tmp_name"], $uploadDir . $imeDat);
+
+            $sql .= ", slika = ?";
+            $params[] = "uploads/users/" . $imeDat;
+        }
+    }
+
+    $sql .= " WHERE id_uporabnik = ?";
+    $params[] = $id;
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
+
+    header("Location: profil.php?id=" . $id);
+    exit;
+}
+
+include "../includes/header.php";
 
 // ID uporabnika iz GET parametra
 $uporabnik_id = $_GET['id'] ?? null;
@@ -36,14 +80,16 @@ $wishlist = $wishlist_stmt->fetchAll(PDO::FETCH_ASSOC);
 <div class="container my-5">
     <!-- UPORABNIK -->
     <div class="d-flex align-items-center mb-4 flex-wrap">
-        <img src="data:image/jpeg;base64,<?php echo base64_encode($uporabnik['slika']); ?>" class="rounded-circle me-3" width="100" height="100" alt="Profilna slika">
+        <img src="/<?php echo htmlspecialchars($uporabnik['slika'] ?? '../slike/default-user.png'); ?>" class="rounded-circle me-3" width="100" height="100" alt="Profilna slika">
         <div>
             <h3 class="mb-1"><?php echo htmlspecialchars($uporabnik['ime'] . ' ' . $uporabnik['priimek']); ?></h3>
             <p class="mb-0"><i class="bi bi-person-fill me-1"></i><?php echo htmlspecialchars($uporabnik['uporabnisko_ime']); ?></p>
             <p class="mb-0"><i class="bi bi-geo-alt-fill me-1"></i>Lokacija</p>
         </div>
         <div class="ms-auto">
-            <button class="btn btn-dark">Uredi profil</button>
+            <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#urediProfilModal">
+                Uredi profil
+            </button>
             <a href="/includes/odjava.php" class="btn btn-outline-danger ms-2">Odjava</a>
         </div>
     </div>
@@ -58,7 +104,7 @@ $wishlist = $wishlist_stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="col-6 col-md-6 col-lg-6">
                     <div class="produkt-kartica bg-white p-2 rounded position-relative">
                         <div class="slika-ovoj position-relative">
-                            <img src="data:image/jpeg;base64,<?php echo base64_encode($p['slika']); ?>" class="img-fluid rounded" alt="">
+                            <img src="/<?php echo htmlspecialchars($p['slika']); ?>" class="img-fluid rounded" alt="">
                         </div>
                         <h5 class="mt-2"><?php echo htmlspecialchars($p['naziv']); ?></h5>
                         <p class="cena"><?php echo $p['cena'] ? number_format($p['cena'],2)." €" : "po dogovoru"; ?></p>
@@ -79,16 +125,7 @@ $wishlist = $wishlist_stmt->fetchAll(PDO::FETCH_ASSOC);
         <!-- Desni: Wishlist -->
         <div class="col-lg-6 mb-4">
             <h4>Wishlist</h4>
-            <?php
-            foreach ($wishlist as &$p) {
-                if (!empty($p['slika'])) {
-                    $p['slika'] = base64_encode($p['slika']);
-                } else {
-                    $p['slika'] = null;
-                }
-            }
-            unset($p);
-            ?>
+            
             <div id="product-grid" data-layout="wishlist"></div>
         </div>
     </div>
@@ -101,5 +138,46 @@ window.products = <?php
     );
 ?>;
 </script>
+
+<div class="modal fade" id="urediProfilModal" tabindex="-1">
+  <div class="modal-dialog">
+    <form class="modal-content" method="post" enctype="multipart/form-data" style="color:black;">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Uredi profil</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+
+    
+
+        <div class="mb-3">
+          <label class="form-label">Ime</label>
+          <input type="text" name="ime" class="form-control"
+                 value="<?php echo htmlspecialchars($uporabnik['ime']); ?>" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Priimek</label>
+          <input type="text" name="priimek" class="form-control"
+                 value="<?php echo htmlspecialchars($uporabnik['priimek']); ?>" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Nova profilna slika</label>
+          <input type="file" name="nova_slika" class="form-control" accept="image/*">
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button type="submit" name="shrani_profil" class="btn btn-dark">Shrani</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Prekliči</button>
+      </div>
+
+    </form>
+  </div>
+</div>
 
 <?php include "../includes/footer.php"; ?>

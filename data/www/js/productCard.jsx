@@ -15,7 +15,7 @@ const ProductCard = ({ product, colClass }) => {
 
                     <div className="position-relative slika-ovoj">
                         <img
-                            src={`data:image/jpeg;base64,${product.slika}`}
+                            src={`/${product.slika ?? "slike/default-product.png"}`}
                             className="card-img-top"
                             alt={product.naziv}
                         />

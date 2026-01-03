@@ -156,16 +156,7 @@ $stevilo_rezultatov = count($produkti);
 
     <div id="product-grid"></div>
 
-    <?php
-    foreach ($produkti as &$p) {
-        if (!empty($p['slika'])) {
-            $p['slika'] = base64_encode($p['slika']);
-        } else {
-            $p['slika'] = null;
-        }
-    }
-    unset($p);
-    ?>
+  
     
     <script>
     window.products = <?php

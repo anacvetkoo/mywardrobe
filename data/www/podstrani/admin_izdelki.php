@@ -35,7 +35,7 @@ $produkti = $stmt->fetchAll(PDO::FETCH_ASSOC);
     >
 
                     <img
-                        src="data:image/jpeg;base64,<?= base64_encode($p["slika"]) ?>"
+                        src="/<?= htmlspecialchars($p["slika"] ?? 'slike/default-product.png') ?>"
                         class="card-img-top"
                         alt="<?= htmlspecialchars($p["naziv"]) ?>"
                     >

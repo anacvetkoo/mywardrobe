@@ -34,7 +34,7 @@ if(!$produkt) {
         <!-- LEVA STRAN: SLIKA -->
         <div class="col-12 col-md-6">
             <div class="produkt-slika text-center">
-                <img src="data:image/jpeg;base64,<?php echo base64_encode($produkt['slika']); ?>" class="img-fluid rounded" alt="<?php echo htmlspecialchars($produkt['naziv']); ?>">
+                <img src="/<?php echo htmlspecialchars($produkt['slika'] ?? 'slike/default-product.png'); ?>" class="img-fluid rounded" alt="<?php echo htmlspecialchars($produkt['naziv']); ?>">
             
             </div>
         </div>

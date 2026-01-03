@@ -35,6 +35,27 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         // SHA-256 hash gesla
         $hash = hash('sha256', $geslo);
 
+        $slikaPot = null;
+
+        if (isset($_FILES["profile_image"]) && $_FILES["profile_image"]["error"] === UPLOAD_ERR_OK) {
+
+            $uploadDir = "../uploads/users/";
+            $ext = strtolower(pathinfo($_FILES["profile_image"]["name"], PATHINFO_EXTENSION));
+
+            $dovoljeni = ["jpg", "jpeg", "png", "webp"];
+            if (!in_array($ext, $dovoljeni)) {
+                $napaka = "Profilna slika mora biti JPG, PNG ali WEBP.";
+            } else {
+                $imeDatoteke = "user_" . time() . "." . $ext;
+                $cilj = $uploadDir . $imeDatoteke;
+
+                move_uploaded_file($_FILES["profile_image"]["tmp_name"], $cilj);
+
+                // POT, KI GRE V BAZO (RELATIVNA!)
+                $slikaPot = "uploads/users/" . $imeDatoteke;
+            }
+        }
+
        // 1. generiraj 2FA kodo
         $koda = random_int(100000, 999999);
         $potece = date("Y-m-d H:i:s", time() + 600); // 10 minut
@@ -46,18 +67,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 priimek,
                 uporabnisko_ime,
                 geslo,
+                slika,
                 TK_tip_uporabnika,
                 aktiven,
                 koda_2fa,
                 koda_2fa_potece
             )
-            VALUES (?, ?, ?, ?, ?, 0, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, 0, ?, ?)
         ");
         $ins->execute([
             $ime,
             $priimek,
             $email,
             $hash,
+            $slikaPot,
             1,
             $koda,
             $potece
@@ -97,7 +120,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     </div>
     <?php endif; ?>
 
-    <form class="w-100" style="max-width:400px;" action="" method="post">
+    <form class="w-100" style="max-width:400px;" action="" method="post" enctype="multipart/form-data">
         <div class="mb-3">
             <label for="ime" class="form-label">Ime</label>
             <input type="text" class="form-control" id="ime" name="ime" required>
@@ -117,6 +140,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <div class="mb-3">
             <label for="geslo2" class="form-label">Ponovi geslo</label>
             <input type="password" class="form-control" id="geslo2" name="geslo2" required>
+        </div>
+        <div class="mb-3">
+            <label for="geslo2" class="form-label">Profilna slika (neobvezno)</label>
+            <input type="file" name="profile_image" accept="image/*">
         </div>
         <button type="submit" class="btn btn-dark w-100">Registriraj se</button>
     </form>

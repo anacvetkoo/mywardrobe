@@ -25,14 +25,7 @@
     <h2 class="mb-4">NOVO</h2>
 
     <div id="product-grid"></div>
-    <?php
-    foreach ($produkti as &$p) {
-        if (!empty($p['slika'])) {
-            $p['slika'] = base64_encode($p['slika']);
-        }
-    }
-    unset($p);
-    ?>
+    
     <script>
         const products = <?php echo json_encode($produkti,
         JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
