@@ -39,9 +39,9 @@ require_once __DIR__ . "/session.php";
         <!-- Navigacija (desktop) -->
         <div class="d-flex justify-content-center flex-grow-1">
             <nav class="d-none d-lg-flex align-items-center">
-                <a class="nav-link me-3" href="/podstrani/kategorija.php?tip=oblacila">Oblačila</a>
-                <a class="nav-link me-3" href="/podstrani/kategorija.php?tip=obutev">Obutev</a>
-                <a class="nav-link me-3" href="/podstrani/kategorija.php?tip=dodatki">Dodatki</a>
+                <a class="nav-link me-3" href="/podstrani/kategorija.php?nadkategorija=oblacila">Oblačila</a>
+                <a class="nav-link me-3" href="/podstrani/kategorija.php?nadkategorija=obutev">Obutev</a>
+                <a class="nav-link me-3" href="/podstrani/kategorija.php?nadkategorija=dodatki">Dodatki</a>
                 <a class="nav-link me-3" href="/podstrani/kategorija.php">Vse</a>
                 <?php if (jeAdmin()): ?>
                     <a class="nav-link me-3" href="/podstrani/admin_uporabniki.php">Uporabniki</a>
@@ -88,9 +88,9 @@ require_once __DIR__ . "/session.php";
     <!-- Mobile meni -->
     <div class="collapse" id="navMenu">
         <nav class="nav nav-pills flex-column text-center py-3">
-            <a class="nav-link text-dark me-3" href="/podstrani/kategorija.php?tip=oblacila">Oblačila</a>
-            <a class="nav-link text-dark me-3" href="/podstrani/kategorija.php?tip=obutev">Obutev</a>
-            <a class="nav-link text-dark me-3" href="/podstrani/kategorija.php?tip=dodatki">Dodatki</a>
+            <a class="nav-link text-dark me-3" href="/podstrani/kategorija.php?nadkategorija=oblacila">Oblačila</a>
+            <a class="nav-link text-dark me-3" href="/podstrani/kategorija.php?nadkategorija=obutev">Obutev</a>
+            <a class="nav-link text-dark me-3" href="/podstrani/kategorija.php?nadkategorija=dodatki">Dodatki</a>
             <a class="nav-link text-dark me-3" href="/podstrani/kategorija.php">Vse</a>
             <?php if (jeAdmin()): ?>
                 <a class="nav-link" href="/podstrani/admin_uporabniki.php">Uporabniki</a>
