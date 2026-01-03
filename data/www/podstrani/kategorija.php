@@ -42,14 +42,40 @@ if (!empty($_GET['ohranjenost'])) {
 }
 
 // Cena
-if (!empty($_GET['cena_od'])) {
-    $where[] = "cena >= ?";
-    $params[] = $_GET['cena_od'];
+$cena_od = $_GET['cena_od'] ?? null;
+$cena_do = $_GET['cena_do'] ?? null;
+$po_dogovoru = isset($_GET['po_dogovoru']);
+
+$cena_and = [];
+$cena_or = [];
+
+// OD
+if ($cena_od !== null && $cena_od !== '') {
+    $cena_and[] = "cena >= ?";
+    $params[] = $cena_od;
 }
-if (!empty($_GET['cena_do'])) {
-    $where[] = "cena <= ?";
-    $params[] = $_GET['cena_do'];
+
+// DO
+if ($cena_do !== null && $cena_do !== '') {
+    $cena_and[] = "cena <= ?";
+    $params[] = $cena_do;
 }
+
+// če imamo OD ali DO
+if ($cena_and) {
+    $cena_or[] = '(' . implode(' AND ', $cena_and) . ')';
+}
+
+// PO DOGOVORU
+if ($po_dogovoru) {
+    $cena_or[] = "cena IS NULL";
+}
+
+// končni pogoj
+if ($cena_or) {
+    $where[] = '(' . implode(' OR ', $cena_or) . ')';
+}
+
 
 // --- NADKATEGORIJA / KATEGORIJA ---
 if ($nadkategorija_naziv !== null) {
@@ -86,9 +112,15 @@ if ($nadkategorija_naziv !== null) {
 
 // --- RAZVRŠČANJE (privzeto: najnovejši) ---
 $orderby = "ORDER BY objavljeno DESC";
+
 if (!empty($_GET['sort'])) {
-    if ($_GET['sort'] === 'cena_nizje') $orderby = "ORDER BY cena ASC";
-    if ($_GET['sort'] === 'cena_visje') $orderby = "ORDER BY cena DESC";
+    if ($_GET['sort'] === 'cena_nizje') {
+        // NULL (po dogovoru) na konec
+        $orderby = "ORDER BY cena IS NULL, cena ASC";
+    }
+    if ($_GET['sort'] === 'cena_visje') {
+        $orderby = "ORDER BY cena IS NULL, cena DESC";
+    }
 }
 
 // --- KONČNA POIZVEDBA ---
@@ -151,8 +183,15 @@ include "../includes/header.php";
             foreach ($ohranjenosti_stmt as $o):
             ?>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox"
-                           name="ohranjenost[]" value="<?= $o['id_ohranjenost'] ?>">
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        name="ohranjenost[]"
+                        value="<?= $o['id_ohranjenost'] ?>"
+                        <?= isset($_GET['ohranjenost']) && in_array($o['id_ohranjenost'], $_GET['ohranjenost'])
+                            ? 'checked'
+                            : '' ?>
+                    >
                     <label class="form-check-label">
                         <?= htmlspecialchars($o['ohranjenost']) ?>
                     </label>
@@ -167,6 +206,21 @@ include "../includes/header.php";
                 <input type="number" class="form-control" name="cena_do" placeholder="do">
             </div>
         </div>
+        <div class="col-md-3">
+            <div class="form-check mt-4">
+                <input
+                    class="form-check-input"
+                    type="checkbox"
+                    name="po_dogovoru"
+                    value="1"
+                    id="po-dogovoru"
+                    <?= isset($_GET['po_dogovoru']) ? 'checked' : '' ?>
+                >
+                <label class="form-check-label" for="po-dogovoru">
+                    Po dogovoru
+                </label>
+            </div>
+        </div>
 
         <div class="col-md-3">
             <label>Razvrsti:</label>
@@ -179,7 +233,10 @@ include "../includes/header.php";
 
         <div class="col-md-3 d-flex align-items-end gap-2">
             <button type="submit" class="btn btn-dark">Filtriraj</button>
-            <a href="kategorija.php" class="btn btn-outline-dark">Počisti filtre</a>
+            <a href="kategorija.php<?= $nadkategorija_naziv ? '?nadkategorija=' . urlencode($nadkategorija_naziv) : '' ?>"
+            class="btn btn-outline-dark">
+                Počisti filtre
+            </a>
         </div>
     </form>
 
