@@ -118,7 +118,7 @@ if(!$uporabnik_id){
 
 // Podatki uporabnika
 $uporabnik_stmt = $pdo->prepare("
-    SELECT ime, priimek, uporabnisko_ime, slika, lokacija_lat, lokacija_lng
+    SELECT ime, priimek, uporabnisko_ime, slika, lokacija_lat, lokacija_lng, stripe_account_id
     FROM Uporabnik WHERE id_uporabnik = ?
 ");
 $uporabnik_stmt->execute([$uporabnik_id]);
@@ -172,11 +172,25 @@ $wishlist = $wishlist_stmt->fetchAll(PDO::FETCH_ASSOC);
             
         </div>
 
-        <div class="ms-auto">
-            <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#urediProfilModal">
+        <div class="ms-auto text-end">
+            <button class="btn btn-dark mb-2" data-bs-toggle="modal" data-bs-target="#urediProfilModal">
                 Uredi profil
             </button>
-            <a href="/includes/odjava.php" class="btn btn-outline-danger ms-2">Odjava</a>
+
+            <a href="/includes/odjava.php" class="btn btn-outline-danger mb-2 d-block">
+                Odjava
+            </a>
+
+            <?php if (empty($uporabnik['stripe_account_id'])): ?>
+                <a href="/includes/stripe_connect_start.php"
+                class="btn btn-primary d-block">
+                    Poveži Stripe račun
+                </a>
+            <?php else: ?>
+                <span class="badge bg-success d-block mt-2">
+                    Stripe račun povezan ✔
+                </span>
+            <?php endif; ?>
         </div>
             
 

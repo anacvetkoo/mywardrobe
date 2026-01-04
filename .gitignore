@@ -31,3 +31,5 @@ temp/
 
 !data/www/
 !data/www/**
+
+data/www/includes/stripe
