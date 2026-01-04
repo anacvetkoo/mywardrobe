@@ -17,7 +17,7 @@
 <section class="hero">
     <div class="hero-content">
         <h1>Želite prevetriti svojo garderobo?</h1>
-        <a href="podstrani/pordaj.php" class="btn">Prodaj zdaj</a>
+        <p>prodajte oblačila, ki jih ne nosite več, in poiščite nove modne zaklade po dostopnih cenah.</p>
     </div>
 </section>
 
@@ -32,7 +32,7 @@
     </script>
 
     <div class="text-center mt-4">
-        <a href="kategorija.php" class="btn btn-secondary">Pokaži več</a>
+        <a href="/podstrani/kategorija.php" class="btn btn-secondary">Pokaži več</a>
     </div>
 </section>
 
