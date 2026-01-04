@@ -50,5 +50,13 @@
             <script type="text/babel" src="/js/productCard.jsx"></script>
             <script type="text/babel" src="/js/productGrid.jsx"></script>
             <script type="text/babel" src="/js/app.jsx"></script>
+
+            <script>
+              document.addEventListener("DOMContentLoaded", () => {
+                document.querySelectorAll("img:not([loading])").forEach(img => {
+                  img.setAttribute("loading", "lazy");
+                });
+              });
+            </script>
           
           </footer>

@@ -18,6 +18,7 @@ const ProductCard = ({ product, colClass }) => {
                             src={`/${product.slika ?? "slike/default-product.png"}`}
                             className="card-img-top"
                             alt={product.naziv}
+                            loading="lazy"
                         />
 
                         
