@@ -38,6 +38,10 @@ if(!$produkt) {
 ?>
 
 <div class="container my-5">
+    <div id="kontaktGlobalSuccess"
+        class="alert alert-success text-center d-none">
+        Kontaktiranje prodajalca je bilo uspešno ✔
+    </div>
     <div class="row g-4">
         <!-- LEVA STRAN: SLIKA -->
         <div class="col-12 col-md-6">
@@ -72,7 +76,46 @@ if(!$produkt) {
 
         <div class="d-flex gap-2 mt-3">
             <button class="btn btn-dark">Kupi zdaj</button>
-            <button class="btn btn-outline-dark">Kontaktiraj prodajalca</button>
+            <!-- GUMB -->
+            <button class="btn btn-outline-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#kontaktModal">
+                Kontaktiraj prodajalca
+            </button>
+
+            <!-- MODAL -->
+            <div class="modal fade" id="kontaktModal" tabindex="-1" style="color:black;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Kontaktiraj prodajalca</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <textarea id="kontaktSporocilo"
+                            class="form-control"
+                            rows="5"
+                            placeholder="Vpiši sporočilo..."></textarea>
+
+                    <div id="kontaktError" class="alert alert-danger mt-2 d-none">
+                        Sporočilo je obvezno.
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Prekliči</button>
+                    <button class="btn btn-primary" onclick="posljiKontakt()">
+                        Pošlji
+                    </button>
+                </div>
+
+                </div>
+            </div>
+            </div>
+
         </div>
     </div>
 </div>
@@ -120,6 +163,72 @@ document.getElementById("wishlistBtn")?.addEventListener("click", async function
     }
 });
 </script>
+
+<script>
+function posljiKontakt() {
+    const msg = document.getElementById("kontaktSporocilo").value.trim();
+    const errorBox = document.getElementById("kontaktError");
+
+    // reset opozorila
+    errorBox.classList.add("d-none");
+
+    //validacija – prazno sporočilo
+    if (msg === "") {
+        errorBox.classList.remove("d-none");
+        return;
+    }
+
+    fetch("/includes/poslji_sporocilo_produkt.php", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            produkt_id: <?= (int)$produkt['id_produkt'] ?>,
+            sporocilo: msg
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (!data.success) {
+            errorBox.textContent = data.error || "Prišlo je do napake.";
+            errorBox.classList.remove("d-none");
+            return;
+        }
+
+        // uspešno → zapri modal
+        const modalEl = document.getElementById("kontaktModal");
+        const modal = bootstrap.Modal.getInstance(modalEl);
+        modal.hide();
+
+        // ⬇⬇⬇ DODAJ TO TAKOJ ZA modal.hide()
+        setTimeout(() => {
+            document.body.classList.remove("modal-open");
+
+            document.querySelectorAll(".modal-backdrop").forEach(el => el.remove());
+        }, 50);
+
+
+        // počisti textarea
+        document.getElementById("kontaktSporocilo").value = "";
+
+        // pokaži globalno obvestilo
+        const successBox = document.getElementById("kontaktGlobalSuccess");
+        successBox.classList.remove("d-none");
+
+        // skrij obvestilo po 5s
+        setTimeout(() => {
+            successBox.classList.add("d-none");
+        }, 5000);
+    })
+    .catch(() => {
+        errorBox.textContent = "Napaka pri povezavi s strežnikom.";
+        errorBox.classList.remove("d-none");
+    });
+}
+</script>
+
+
+
 
 
 <?php include "../includes/footer.php"; ?>
