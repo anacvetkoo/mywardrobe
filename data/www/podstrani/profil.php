@@ -151,7 +151,14 @@ $ohranjenosti = $pdo->query("
 ")->fetchAll(PDO::FETCH_ASSOC);
 
 // Wishlist (za zdaj izpišemo nekaj produktov, lahko random)
-$wishlist_stmt = $pdo->query("SELECT id_produkt, naziv, cena, slika FROM Produkt LIMIT 6");
+$wishlist_stmt = $pdo->prepare("
+    SELECT p.id_produkt, p.naziv, p.cena, p.slika
+    FROM Wishlist w
+    JOIN Produkt p ON p.id_produkt = w.TK_produkt
+    WHERE w.TK_uporabnik = ?
+    ORDER BY w.TK_produkt DESC
+");
+$wishlist_stmt->execute([$uporabnik_id]);
 $wishlist = $wishlist_stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 

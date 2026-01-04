@@ -22,6 +22,14 @@ $stmt = $pdo->prepare("
 $stmt->execute([$id_produkt]);
 $produkt = $stmt->fetch(PDO::FETCH_ASSOC);
 
+$jeVWishlistu = false;
+
+if (isset($_SESSION["uporabnik_id"])) {
+    $w = $pdo->prepare("SELECT 1 FROM Wishlist WHERE TK_uporabnik = ? AND TK_produkt = ?");
+    $w->execute([$_SESSION["uporabnik_id"], $produkt["id_produkt"]]);
+    $jeVWishlistu = (bool)$w->fetchColumn();
+}
+
 if(!$produkt) {
     echo "<p>Produkt ne obstaja.</p>";
     include "../includes/footer.php";
@@ -43,8 +51,19 @@ if(!$produkt) {
         <div class="col-12 col-md-6">
     <div class="produkt-info">
         <h2 class="d-flex align-items-center justify-content-between">
-            <?php echo htmlspecialchars($produkt['naziv']); ?>
-          
+            <span><?php echo htmlspecialchars($produkt['naziv']); ?></span>
+
+            <button
+                type="button"
+                id="wishlistBtn"
+                class="btn btn-outline-dark"
+                aria-label="Dodaj na wishlist"
+                <?php if (!isset($_SESSION["uporabnik_id"])): ?>
+                    data-not-logged="1"
+                <?php endif; ?>
+            >
+                <i id="wishlistIcon" class="bi <?php echo $jeVWishlistu ? 'bi-heart-fill text-danger' : 'bi-heart'; ?>"></i>
+            </button>
         </h2>
 
         <p><strong>Ohranjenost:</strong> <?php echo htmlspecialchars($produkt['ohranjenost']); ?></p>
@@ -59,5 +78,48 @@ if(!$produkt) {
 </div>
     </div>
 </div>
+
+
+<script>
+document.getElementById("wishlistBtn")?.addEventListener("click", async function () {
+
+    // če ni prijavljen -> samo alert (brez redirecta)
+    if (this.dataset.notLogged === "1") {
+        alert("Za wishlist morate biti prijavljeni.");
+        return;
+    }
+
+    const icon = document.getElementById("wishlistIcon");
+    const produktId = <?php echo (int)$produkt["id_produkt"]; ?>;
+
+    try {
+        const res = await fetch("/includes/wishlist_toggle.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ produkt_id: produktId })
+        });
+
+        const data = await res.json();
+
+        if (!data.success) {
+            alert(data.message || "Napaka pri wishlistu.");
+            return;
+        }
+
+        if (data.action === "added") {
+            icon.classList.remove("bi-heart");
+            icon.classList.add("bi-heart-fill", "text-danger");
+        } else if (data.action === "removed") {
+            icon.classList.remove("bi-heart-fill", "text-danger");
+            icon.classList.add("bi-heart");
+        }
+
+    } catch (e) {
+        console.error(e);
+        alert("Napaka pri povezavi (wishlist).");
+    }
+});
+</script>
+
 
 <?php include "../includes/footer.php"; ?>

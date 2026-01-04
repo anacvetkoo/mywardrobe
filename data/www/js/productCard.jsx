@@ -20,12 +20,7 @@ const ProductCard = ({ product, colClass }) => {
                             alt={product.naziv}
                         />
 
-                        <button
-                            className="btn btn-light position-absolute top-0 end-0 m-2 p-1 rounded-circle wishlist-btn"
-                            type="button"
-                        >
-                            <i className="bi bi-heart"></i>
-                        </button>
+                        
                     </div>
 
                     <div className="card-body text-center">
